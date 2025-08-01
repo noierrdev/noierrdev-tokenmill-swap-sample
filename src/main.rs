@@ -242,6 +242,8 @@ async fn main() {
     println!("Fee: {}", fee);
     println!("Bump: {}", bump);
 
+    println!("sqrt_price_x96 : {}", sqrt_price_x96);
+
     // let mut sample_swap_base_buy_tx:Transaction=build_tokenmill_swap_base_output(
     //     &wallet, 
     //     &sample_pool, 
