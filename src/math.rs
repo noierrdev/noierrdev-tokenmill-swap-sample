@@ -3,7 +3,7 @@ use ruint::aliases::{U256, U512};
 
 pub fn mul_div(x: U256, y: U256, denominator: U256) -> Result<u128> {
     if denominator.is_zero() {
-        return Err(TokenMillV2Error::DivisionByZero.into());
+        return Err("DivisionByZero");
     }
 
     let x = U512::from(x);
