@@ -49,55 +49,7 @@ use std::convert::TryInto;
 
 mod math;
 mod swap_math;
-
-#[derive(Debug)]
-pub struct RawOptionPubkey(pub Option<Pubkey>);
-
-impl BorshDeserialize for RawOptionPubkey {
-    fn deserialize_reader<R: std::io::Read>(reader: &mut R) -> std::io::Result<Self> {
-        let mut tag = [0u8; 1];
-        reader.read_exact(&mut tag)?;
-
-        match tag[0] {
-            0 => Ok(RawOptionPubkey(None)),
-            1 => {
-                let mut key_bytes = [0u8; 32];
-                reader.read_exact(&mut key_bytes)?;
-                Ok(RawOptionPubkey(Some(Pubkey::new_from_array(key_bytes))))
-            }
-            other => Err(std::io::Error::new(
-                std::io::ErrorKind::InvalidData,
-                format!("Invalid Option representation: {}. The first byte must be 0 or 1", other),
-            )),
-        }
-    }
-}
-
-#[derive(BorshDeserialize, Debug)]
-pub struct MarketSettings {
-    pub max_supply: u64,
-    pub sqrt_price_a_x96: u128,
-    pub sqrt_price_b_x96: u128,
-    pub liquidity_a: u128,
-    pub liquidity_b: u128,
-    pub fee: u32,
-}
-
-#[derive(BorshDeserialize, Debug)]
-pub struct MarketAccount {
-    pub config: Pubkey,
-    pub creator: Pubkey,
-    pub swap_authority: RawOptionPubkey,
-    pub token_mint_0: Pubkey,
-    pub token_mint_1: Pubkey,
-    pub reserve_0: Pubkey,
-    pub reserve_1: Pubkey,
-    pub fee_reserve: RawOptionPubkey,
-    pub fee_reserve_last_update: i64,
-    pub settings: MarketSettings,
-    pub sqrt_price_x96: u128,
-    pub bump: [u8; 1],
-}
+mod quote;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -141,8 +93,6 @@ async fn main() {
         .unwrap();
     println!("Recent Blockhash : {}",recent_blockhash);
 
-    //create sampe swap tx :)
-
 
     let sample_market="2Gcc963e2BY6syyjB3CGrFMw93e8c8zysygzu89Bxdic";
 
@@ -151,8 +101,6 @@ async fn main() {
     let account_raw_data=rpc_client.get_account(&Pubkey::from_str_const(sample_market)).unwrap();
     let account_raw_bytes: &[u8] = &account_raw_data.data;
     println!("{:?}", account_raw_bytes);
-    // let market = MarketAccount::try_from_slice(account_raw_bytes);
-    // println!("{:?}", market);
 
     let mut offset = 8;
 
@@ -245,6 +193,8 @@ async fn main() {
     println!("Bump: {}", bump);
 
     println!("sqrt_price_x96 : {}", sqrt_price_x96);
+
+
 
     // let mut sample_swap_base_buy_tx:Transaction=build_tokenmill_swap_base_output(
     //     &wallet, 
