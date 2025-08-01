@@ -109,7 +109,7 @@ async fn main() {
     let market_data=market::Market::from_bytes(account_raw_bytes).unwrap();
     println!("{:?}", market_data);
 
-    let quote_data=quote::quote(&market_data, true, -1,0).unwrap();
+    let quote_data=quote::quote(&market_data, true, 1,market_data.sqrt_price_x96).unwrap();
     println!("{:?}", quote_data);
 
     // let mut sample_swap_base_buy_tx:Transaction=build_tokenmill_swap_base_output(
