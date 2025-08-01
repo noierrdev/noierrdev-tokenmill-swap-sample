@@ -44,6 +44,35 @@ use serde_json::Value;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
 
+
+#[derive(BorshDeserialize, Debug)]
+pub struct MarketSettings {
+    pub max_supply: u64,
+    pub sqrt_price_a_x96: u128,
+    pub sqrt_price_b_x96: u128,
+    pub liquidity_a: u128,
+    pub liquidity_b: u128,
+    pub fee: u32,
+}
+
+#[derive(BorshDeserialize, Debug)]
+pub struct MarketAccount {
+    pub config: Pubkey,
+    pub creator: Pubkey,
+    pub swap_authority_option: u8, // Option<Pubkey> encoded as tag + maybe pubkey
+    pub swap_authority: Option<Pubkey>,
+    pub token_mint_0: Pubkey,
+    pub token_mint_1: Pubkey,
+    pub reserve_0: Pubkey,
+    pub reserve_1: Pubkey,
+    pub fee_reserve_option: u8,
+    pub fee_reserve: Option<Pubkey>,
+    pub fee_reserve_last_update: i64,
+    pub settings: MarketSettings,
+    pub sqrt_price_x96: u128,
+    pub bump: [u8; 1],
+}
+
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum SwapParameters {
@@ -95,7 +124,11 @@ async fn main() {
 
     let account_raw_data=rpc_client.get_account(&Pubkey::from_str_const(sample_market)).unwrap();
 
-    println!("{:?}", account_raw_data);
+    
+
+    let market = MarketAccount::try_from_slice(account_raw_data.data);
+
+    println!("{:?}", market);
 
     // let mut sample_swap_base_buy_tx:Transaction=build_tokenmill_swap_base_output(
     //     &wallet, 
