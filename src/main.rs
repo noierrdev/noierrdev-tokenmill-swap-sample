@@ -151,14 +151,14 @@ async fn main() {
     let account_raw_bytes: &[u8] = &account_raw_data.data;
 
     println!("{:?}", account_raw_data);
-    let market = MarketAccount::try_from_slice(account_raw_bytes);
-    println!("{:?}", market);
+    // let market = MarketAccount::try_from_slice(account_raw_bytes);
+    // println!("{:?}", market);
 
-    // let mut offset = 0;
+    let mut offset = 0;
 
-    // // pub config: Pubkey
-    // let config = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32]);
-    // offset += 32;
+    // pub config: Pubkey
+    let config = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32].try_into().unwrap());
+    offset += 32;
 
     // // pub creator: Pubkey
     // let creator = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32]);
