@@ -135,18 +135,18 @@ async fn main() {
     let mut offset = 0;
 
     // pub config: Pubkey
-    let config = Pubkey::new(&account_raw_bytes[offset..offset + 32]);
+    let config = Pubkey::new_from_array(&account_raw_bytes[offset..offset + 32]);
     offset += 32;
 
     // pub creator: Pubkey
-    let creator = Pubkey::new(&account_raw_bytes[offset..offset + 32]);
+    let creator = Pubkey::new_from_array(&account_raw_bytes[offset..offset + 32]);
     offset += 32;
 
     // optional swap_authority: expect 1 byte tag, then maybe 32 bytes
     let swap_auth_tag = account_raw_bytes[offset];
     offset += 1;
     let swap_authority = if swap_auth_tag == 1 {
-        let key = Pubkey::new(&account_raw_bytes[offset..offset + 32]);
+        let key = Pubkey::new_from_array(&account_raw_bytes[offset..offset + 32]);
         offset += 32;
         Some(key)
     } else {
@@ -154,26 +154,26 @@ async fn main() {
     };
 
     // token_mint_0
-    let token_mint_0 = Pubkey::new(&account_raw_bytes[offset..offset + 32]);
+    let token_mint_0 = Pubkey::new_from_array(&account_raw_bytes[offset..offset + 32]);
     offset += 32;
 
     // token_mint_1
-    let token_mint_1 = Pubkey::new(&account_raw_bytes[offset..offset + 32]);
+    let token_mint_1 = Pubkey::new_from_array(&account_raw_bytes[offset..offset + 32]);
     offset += 32;
 
     // reserve_0
-    let reserve_0 = Pubkey::new(&account_raw_bytes[offset..offset + 32]);
+    let reserve_0 = Pubkey::new_from_array(&account_raw_bytes[offset..offset + 32]);
     offset += 32;
 
     // reserve_1
-    let reserve_1 = Pubkey::new(&account_raw_bytes[offset..offset + 32]);
+    let reserve_1 = Pubkey::new_from_array(&account_raw_bytes[offset..offset + 32]);
     offset += 32;
 
     // optional fee_reserve
     let fee_reserve_tag = account_raw_bytes[offset];
     offset += 1;
     let fee_reserve = if fee_reserve_tag == 1 {
-        let key = Pubkey::new(&account_raw_bytes[offset..offset + 32]);
+        let key = Pubkey::new_from_array(&account_raw_bytes[offset..offset + 32]);
         offset += 32;
         Some(key)
     } else {
