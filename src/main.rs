@@ -160,88 +160,88 @@ async fn main() {
     let config = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32].try_into().unwrap());
     offset += 32;
 
-    // // pub creator: Pubkey
-    // let creator = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32]);
-    // offset += 32;
+    // pub creator: Pubkey
+    let creator = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32].try_into().unwrap());
+    offset += 32;
 
-    // // optional swap_authority: expect 1 byte tag, then maybe 32 bytes
-    // let swap_auth_tag = account_raw_bytes[offset];
-    // offset += 1;
-    // let swap_authority = if swap_auth_tag == 1 {
-    //     let key = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32]);
-    //     offset += 32;
-    //     Some(key)
-    // } else {
-    //     None
-    // };
+    // optional swap_authority: expect 1 byte tag, then maybe 32 bytes
+    let swap_auth_tag = account_raw_bytes[offset];
+    offset += 1;
+    let swap_authority = if swap_auth_tag == 1 {
+        let key = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32].try_into().unwrap());
+        offset += 32;
+        Some(key)
+    } else {
+        None
+    };
 
-    // // token_mint_0
-    // let token_mint_0 = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32]);
-    // offset += 32;
+    // token_mint_0
+    let token_mint_0 = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32].try_into().unwrap());
+    offset += 32;
 
-    // // token_mint_1
-    // let token_mint_1 = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32]);
-    // offset += 32;
+    // token_mint_1
+    let token_mint_1 = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32].try_into().unwrap());
+    offset += 32;
 
-    // // reserve_0
-    // let reserve_0 = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32]);
-    // offset += 32;
+    // reserve_0
+    let reserve_0 = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32].try_into().unwrap());
+    offset += 32;
 
-    // // reserve_1
-    // let reserve_1 = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32]);
-    // offset += 32;
+    // reserve_1
+    let reserve_1 = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32].try_into().unwrap());
+    offset += 32;
 
-    // // optional fee_reserve
-    // let fee_reserve_tag = account_raw_bytes[offset];
-    // offset += 1;
-    // let fee_reserve = if fee_reserve_tag == 1 {
-    //     let key = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32]);
-    //     offset += 32;
-    //     Some(key)
-    // } else {
-    //     None
-    // };
+    // optional fee_reserve
+    let fee_reserve_tag = account_raw_bytes[offset];
+    offset += 1;
+    let fee_reserve = if fee_reserve_tag == 1 {
+        let key = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32].try_into().unwrap());
+        offset += 32;
+        Some(key)
+    } else {
+        None
+    };
 
-    // // i64: fee_reserve_last_update
-    // let fee_reserve_last_update = i64::from_le_bytes(account_raw_bytes[offset..offset + 8].try_into()?);
-    // offset += 8;
+    // i64: fee_reserve_last_update
+    let fee_reserve_last_update = i64::from_le_bytes(account_raw_bytes[offset..offset + 8].try_into().unwrap());
+    offset += 8;
 
-    // // MarketSettings
-    // let max_supply = u64::from_le_bytes(account_raw_bytes[offset..offset + 8].try_into()?);
-    // offset += 8;
+    // MarketSettings
+    let max_supply = u64::from_le_bytes(account_raw_bytes[offset..offset + 8].try_into().unwrap());
+    offset += 8;
 
-    // let sqrt_price_a_x96 = u128::from_le_bytes(account_raw_bytes[offset..offset + 16].try_into()?);
-    // offset += 16;
+    let sqrt_price_a_x96 = u128::from_le_bytes(account_raw_bytes[offset..offset + 16].try_into().unwrap());
+    offset += 16;
 
-    // let sqrt_price_b_x96 = u128::from_le_bytes(account_raw_bytes[offset..offset + 16].try_into()?);
-    // offset += 16;
+    let sqrt_price_b_x96 = u128::from_le_bytes(account_raw_bytes[offset..offset + 16].try_into().unwrap());
+    offset += 16;
 
-    // let liquidity_a = u128::from_le_bytes(account_raw_bytes[offset..offset + 16].try_into()?);
-    // offset += 16;
+    let liquidity_a = u128::from_le_bytes(account_raw_bytes[offset..offset + 16].try_into().unwrap());
+    offset += 16;
 
-    // let liquidity_b = u128::from_le_bytes(account_raw_bytes[offset..offset + 16].try_into()?);
-    // offset += 16;
+    let liquidity_b = u128::from_le_bytes(account_raw_bytes[offset..offset + 16].try_into().unwrap());
+    offset += 16;
 
-    // let fee = u32::from_le_bytes(account_raw_bytes[offset..offset + 4].try_into()?);
-    // offset += 4;
+    let fee = u32::from_le_bytes(account_raw_bytes[offset..offset + 4].try_into().unwrap());
+    offset += 4;
 
-    // // sqrt_price_x96
-    // let sqrt_price_x96 = u128::from_le_bytes(account_raw_bytes[offset..offset + 16].try_into()?);
-    // offset += 16;
+    // sqrt_price_x96
+    let sqrt_price_x96 = u128::from_le_bytes(account_raw_bytes[offset..offset + 16].try_into().unwrap());
+    offset += 16;
 
-    // // bump
-    // let bump = account_raw_bytes[offset];
-    // offset += 1;
+    // bump
+    let bump = account_raw_bytes[offset];
+    offset += 1;
 
-    // // Done: you can now print or structure this data
-    // println!("Config: {}", config);
-    // println!("Creator: {}", creator);
-    // println!("Swap Authority: {:?}", swap_authority);
-    // println!("Token Mint 0: {}", token_mint_0);
-    // println!("Fee Reserve Last Update: {}", fee_reserve_last_update);
-    // println!("Max Supply: {}", max_supply);
-    // println!("Fee: {}", fee);
-    // println!("Bump: {}", bump);
+    // Done: you can now print or structure this data
+    println!("Config: {}", config);
+    println!("Creator: {}", creator);
+    println!("Swap Authority: {:?}", swap_authority);
+    println!("Token Mint 0: {}", token_mint_0);
+    println!("Fee Reserve Last Update: {}", fee_reserve_last_update);
+    println!("Max Supply: {}", max_supply);
+    println!("Fee: {}", fee);
+    println!("Bump: {}", bump);
 
     // let mut sample_swap_base_buy_tx:Transaction=build_tokenmill_swap_base_output(
     //     &wallet, 
