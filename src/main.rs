@@ -50,6 +50,7 @@ use std::convert::TryInto;
 mod math;
 mod swap_math;
 mod quote;
+mod market;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
