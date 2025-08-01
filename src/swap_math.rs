@@ -1,7 +1,7 @@
 use anyhow::{Result, anyhow};
 use ruint::aliases::U256;
 
-use crate::quote::math::{mul_div, mul_div_round_up};
+use crate::math::{mul_div, mul_div_round_up};
 // use token_mill_v2_client::errors::TokenMillV2Error::*;
 
 type GetAmountFn = fn(u128, u128, u128, bool) -> Result<u128>;
