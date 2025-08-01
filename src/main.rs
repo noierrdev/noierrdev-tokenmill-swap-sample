@@ -147,9 +147,7 @@ async fn main() {
     let sample_mint="ALZNPVu3KUZ9jRpbuZKkQbPKf9wHFHpGS2mpjdDtofE1";
 
     let account_raw_data=rpc_client.get_account(&Pubkey::from_str_const(sample_market)).unwrap();
-
     let account_raw_bytes: &[u8] = &account_raw_data.data;
-
     println!("{:?}", account_raw_bytes);
     // let market = MarketAccount::try_from_slice(account_raw_bytes);
     // println!("{:?}", market);
@@ -157,7 +155,7 @@ async fn main() {
     let mut offset = 0;
 
     // pub config: Pubkey
-    let config = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32].try_into().unwrap());
+    let config = Pubkey::new_from_array(&account_raw_bytes[offset..offset + 32].try_into().unwrap());
     offset += 32;
 
     // pub creator: Pubkey
