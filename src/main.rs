@@ -109,7 +109,13 @@ async fn main() {
     let market_data=market::Market::from_bytes(account_raw_bytes).unwrap();
     println!("{:?}", market_data);
 
-    let quote_data=quote::quote(&market_data, false, 100, market_data.sqrt_price_x96*2).unwrap();
+    // zero_for_one : direction of swap
+    // false : token 1 -> token 2
+    // true : token 0 -> token 1
+    let quote_data_1=quote::quote(&market_data, false, 100, market_data.sqrt_price_x96*2).unwrap();
+    println!("{:?}", quote_data);
+
+    let quote_data_2=quote::quote(&market_data, true, 100, market_data.sqrt_price_x96*2).unwrap();
     println!("{:?}", quote_data);
 
     // let mut sample_swap_base_buy_tx:Transaction=build_tokenmill_swap_base_output(
