@@ -10,6 +10,8 @@ use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
 use solana_sdk::pubkey::Pubkey;
 
+pub const TOKENMILL_PROGRAM: &str = "JoeGXemoPqPeGPEXA3Z3UbjoPoGqqfbg8PD58M7Rqj2";
+
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MarketSettings {
@@ -82,7 +84,7 @@ impl Market {
                 token_mint0.as_ref(),
                 &[bump],
             ],
-            &crate::TOKEN_MILL_V2_ID,
+            &Pubkey::from_str_const(TOKENMILL_PROGRAM),
         )
     }
 
@@ -92,7 +94,7 @@ impl Market {
                 &[109, 97, 114, 107, 101, 116],
                 token_mint0.as_ref(),
             ],
-            &crate::TOKEN_MILL_V2_ID,
+            &Pubkey::from_str_const(TOKENMILL_PROGRAM),
         )
     }
 
@@ -197,7 +199,7 @@ impl anchor_lang::AccountSerialize for Market {}
 #[cfg(feature = "anchor")]
 impl anchor_lang::Owner for Market {
     fn owner() -> Pubkey {
-        crate::TOKEN_MILL_V2_ID
+        Pubkey::from_str_const(TOKENMILL_PROGRAM)
     }
 }
 
