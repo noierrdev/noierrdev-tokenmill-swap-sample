@@ -1,8 +1,8 @@
-use anyhow::Result;
+use anyhow::{Result, anyhow};
 use ruint::aliases::U256;
 
 use crate::quote::math::{mul_div, mul_div_round_up};
-use token_mill_v2_client::errors::TokenMillV2Error::*;
+// use token_mill_v2_client::errors::TokenMillV2Error::*;
 
 type GetAmountFn = fn(u128, u128, u128, bool) -> Result<u128>;
 
@@ -220,5 +220,5 @@ pub fn get_next_sqrt_ratio_from_amount_1(
 
     let sqrt_price_next = numerator / U256::from(liquidity);
 
-    sqrt_price_next.try_into().map_err(|_| PriceOverflow.into())
+    sqrt_price_next.try_into().map_err(|_| "PriceOverflow".into())
 }

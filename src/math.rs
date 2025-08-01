@@ -1,9 +1,9 @@
-use anyhow::Result;
+use anyhow::{Result, anyhow};
 use ruint::aliases::{U256, U512};
 
 pub fn mul_div(x: U256, y: U256, denominator: U256) -> Result<u128> {
     if denominator.is_zero() {
-        return Err("DivisionByZero");
+        return Err( anyhow!("DivisionByZero"));
     }
 
     let x = U512::from(x);
@@ -16,7 +16,7 @@ pub fn mul_div(x: U256, y: U256, denominator: U256) -> Result<u128> {
 
     quotient
         .try_into()
-        .map_err(|_| "AmountOverflow")
+        .map_err(|_| anyhow!("AmountOverflow"))
 }
 
 pub fn mul_div_round_up(x: U256, y: U256, denominator: U256) -> Result<u128> {
