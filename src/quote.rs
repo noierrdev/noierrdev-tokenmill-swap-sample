@@ -1,7 +1,10 @@
 use anyhow::Result;
 
-use crate::swap_math::get_delta_amounts;
-use crate::market::Market;
+mod swap_math;
+mod market;
+
+use swap_math::get_delta_amounts;
+use market::Market;
 
 mod math;
 mod swap_math;
