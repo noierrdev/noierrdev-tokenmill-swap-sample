@@ -93,7 +93,7 @@ async fn main() {
 
     let sample_mint="ALZNPVu3KUZ9jRpbuZKkQbPKf9wHFHpGS2mpjdDtofE1";
 
-    let account_raw_data=rpc_client.get_account(Pubkey::from_str_const(sample_market)).unwrap();
+    let account_raw_data=rpc_client.get_account(&Pubkey::from_str_const(sample_market)).unwrap();
 
     println!("{:?}", account_raw_data);
 
