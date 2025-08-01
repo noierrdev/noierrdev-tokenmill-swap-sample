@@ -36,7 +36,7 @@ pub fn get_delta_amounts(
         // `max_amount_in` is set to `u128::MAX` so that it will always be bigger than `amount_in_available`
         let max_amount_in =
             get_amount_in(sqrt_price, target_sqrt_price, liquidity, true).or_else(|err| {
-                if err.to_string() == "AmountOverflow"
+                if err.to_string().contains("AmountOverflow")
                 {
                     Ok(u128::MAX)
                 } else {
@@ -88,7 +88,7 @@ pub fn get_delta_amounts(
         // `max_amount_out` is set to `u128::MAX` so that it will always be bigger than `amount_out_to_fill`
         let max_amount_out = get_amount_out(sqrt_price, target_sqrt_price, liquidity, false)
             .or_else(|err| {
-                if err.to_string() == "AmountOverflow"
+                if err.to_string().contains("AmountOverflow")
                 {
                     Ok(u128::MAX)
                 } else {
