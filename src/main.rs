@@ -47,6 +47,7 @@ use borsh::BorshSerialize;
 
 use std::convert::TryInto;
 
+mod math;
 
 #[derive(Debug)]
 pub struct RawOptionPubkey(pub Option<Pubkey>);
