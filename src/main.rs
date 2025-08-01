@@ -107,6 +107,7 @@ async fn main() {
     // println!("{:?}", account_raw_bytes);
 
     let market_data=market::Market::from_bytes(account_raw_bytes).unwrap();
+    market_data.sqrt_price_x96=427779926819030658986966333;
     println!("{:?}", market_data);
 
     // zero_for_one : direction of swap
