@@ -152,7 +152,7 @@ async fn main() {
     // let market = MarketAccount::try_from_slice(account_raw_bytes);
     // println!("{:?}", market);
 
-    let mut offset = 0;
+    let mut offset = 8;
 
     // pub config: Pubkey
     let config = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32].try_into().unwrap());
