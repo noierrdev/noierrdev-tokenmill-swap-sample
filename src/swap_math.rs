@@ -37,8 +37,8 @@ pub fn get_delta_amounts(
         let max_amount_in =
             get_amount_in(sqrt_price, target_sqrt_price, liquidity, true).or_else(|err| {
                 if err
-                    .downcast_ref::<token_mill_v2_client::errors::TokenMillV2Error>()
-                    .map_or(false, |e| *e == AmountOverflow)
+                    // .downcast_ref::<token_mill_v2_client::errors::TokenMillV2Error>()
+                    .map_or(false, |e| *e == anyhow!("AmountOverflow"))
                 {
                     Ok(u128::MAX)
                 } else {
@@ -51,19 +51,19 @@ pub fn get_delta_amounts(
                 get_next_sqrt_ratio_from_amount_0(
                     sqrt_price,
                     liquidity,
-                    i64::try_from(amount_in_available).map_err(|_| "AmountInOverflow")?,
+                    i64::try_from(amount_in_available).map_err(|_| anyhow!("AmountInOverflow"))?,
                 )?
             } else {
                 get_next_sqrt_ratio_from_amount_1(
                     sqrt_price,
                     liquidity,
-                    i64::try_from(amount_in_available).map_err(|_| "AmountInOverflow")?,
+                    i64::try_from(amount_in_available).map_err(|_| anyhow!("AmountInOverflow"))?,
                 )?
             };
 
             amount_in = get_amount_in(sqrt_price, new_sqrt_price, liquidity, true)?
                 .try_into()
-                .map_err(|_| "AmountInOverflow")?;
+                .map_err(|_| anyhow!("AmountInOverflow"))?;
             fee_amount = delta_amount - amount_in;
         } else {
             new_sqrt_price = target_sqrt_price;
@@ -73,12 +73,12 @@ pub fn get_delta_amounts(
             fee_amount = u64::try_from(
                 (max_amount_in * u128::from(fee)).div_ceil(MAX_FEE_U128 - u128::from(fee)),
             )
-            .map_err(|_| "FeeAmountOverflow")?;
+            .map_err(|_| anyhow!("FeeAmountOverflow"))?;
         }
 
         amount_out = get_amount_out(sqrt_price, new_sqrt_price, liquidity, false)?
             .try_into()
-            .map_err(|_| "AmountOutOverflow")?;
+            .map_err(|_| anyhow!("AmountOutOverflow"))?;
     } else {
         if delta_amount == 0 {
             return Ok((sqrt_price, 0, 0, 0));
@@ -92,7 +92,7 @@ pub fn get_delta_amounts(
             .or_else(|err| {
                 if err
                     // .downcast_ref::<token_mill_v2_client::errors::TokenMillV2Error>()
-                    .map_or(false, |e| *e == "AmountOverflow")
+                    .map_or(false, |e| *e == anyhow!("AmountOverflow"))
                 {
                     Ok(u128::MAX)
                 } else {
@@ -115,12 +115,12 @@ pub fn get_delta_amounts(
 
         amount_in = get_amount_in(sqrt_price, new_sqrt_price, liquidity, true)?
             .try_into()
-            .map_err(|_| AmountInOverflow)?;
+            .map_err(|_| anyhow!("AmountInOverflow"))?;
 
         fee_amount = u64::try_from(
             (u128::from(amount_in) * u128::from(fee)).div_ceil(MAX_FEE_U128 - u128::from(fee)),
         )
-        .map_err(|_| "FeeAmountOverflow")?;
+        .map_err(|_| anyhow!("FeeAmountOverflow"))?;
     }
 
     Ok((new_sqrt_price, amount_in, amount_out, fee_amount))
@@ -173,12 +173,12 @@ pub fn get_amount_1(
         (U256::from(liquidity) * U256::from(sqrt_price_b - sqrt_price_a))
             .div_ceil(U256::from(2u128.pow(SQRT_PRICE_SHIFT as u32)))
             .try_into()
-            .map_err(|_| "AmountOverflow")
+            .map_err(|_| anyhow!("AmountOverflow"))
     } else {
         ((U256::from(liquidity) * U256::from(sqrt_price_b - sqrt_price_a))
             .wrapping_shr(SQRT_PRICE_SHIFT))
         .try_into()
-        .map_err(|_| AmountOverflow)
+        .map_err(|_| anyhow!("AmountOverflow"))
     }
 }
 
@@ -197,7 +197,7 @@ pub fn get_next_sqrt_ratio_from_amount_0(
         true => liquidity + U256::from(amount_0) * U256::from(sqrt_price),
         false => liquidity
             .checked_sub(U256::from(amount_0.abs()) * U256::from(sqrt_price))
-            .ok_or("LiquidityOverflow0")?,
+            .ok_or(anyhow!("LiquidityOverflow0"))?,
     };
 
     mul_div_round_up(liquidity, U256::from(sqrt_price), denominator)
@@ -215,10 +215,10 @@ pub fn get_next_sqrt_ratio_from_amount_1(
         }
         false => (U256::from(sqrt_price) * U256::from(liquidity))
             .checked_sub(U256::from(amount_1.abs()).saturating_shl(SQRT_PRICE_SHIFT))
-            .ok_or("LiquidityOverflow1")?,
+            .ok_or(anyhow!("LiquidityOverflow1"))?,
     };
 
     let sqrt_price_next = numerator / U256::from(liquidity);
 
-    sqrt_price_next.try_into().map_err(|_| "PriceOverflow".into())
+    sqrt_price_next.try_into().map_err(|_| anyhow!("PriceOverflow").into())
 }
