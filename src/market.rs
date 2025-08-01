@@ -75,8 +75,8 @@ impl Market {
     pub fn create_pda(
         token_mint0: Pubkey,
         bump: u8,
-    ) -> Result<solana_program::pubkey::Pubkey, solana_program::pubkey::PubkeyError> {
-        solana_program::pubkey::Pubkey::create_program_address(
+    ) -> Result<solana_sdk::pubkey::Pubkey, solana_sdk::pubkey::PubkeyError> {
+        solana_sdk::pubkey::Pubkey::create_program_address(
             &[
                 &[109, 97, 114, 107, 101, 116],
                 token_mint0.as_ref(),
@@ -86,8 +86,8 @@ impl Market {
         )
     }
 
-    pub fn find_pda(token_mint0: &Pubkey) -> (solana_program::pubkey::Pubkey, u8) {
-        solana_program::pubkey::Pubkey::find_program_address(
+    pub fn find_pda(token_mint0: &Pubkey) -> (solana_sdk::pubkey::Pubkey, u8) {
+        solana_sdk::pubkey::Pubkey::find_program_address(
             &[
                 &[109, 97, 114, 107, 101, 116],
                 token_mint0.as_ref(),
@@ -103,11 +103,11 @@ impl Market {
     }
 }
 
-impl<'a> TryFrom<&solana_program::account_info::AccountInfo<'a>> for Market {
+impl<'a> TryFrom<&solana_sdk::account_info::AccountInfo<'a>> for Market {
     type Error = std::io::Error;
 
     fn try_from(
-        account_info: &solana_program::account_info::AccountInfo<'a>,
+        account_info: &solana_sdk::account_info::AccountInfo<'a>,
     ) -> Result<Self, Self::Error> {
         let mut data: &[u8] = &(*account_info.data).borrow();
         Self::deserialize(&mut data)
@@ -117,7 +117,7 @@ impl<'a> TryFrom<&solana_program::account_info::AccountInfo<'a>> for Market {
 #[cfg(feature = "fetch")]
 pub fn fetch_market(
     rpc: &solana_client::rpc_client::RpcClient,
-    address: &solana_program::pubkey::Pubkey,
+    address: &solana_sdk::pubkey::Pubkey,
 ) -> Result<crate::shared::DecodedAccount<Market>, std::io::Error> {
     let accounts = fetch_all_market(rpc, &[*address])?;
     Ok(accounts[0].clone())
@@ -126,7 +126,7 @@ pub fn fetch_market(
 #[cfg(feature = "fetch")]
 pub fn fetch_all_market(
     rpc: &solana_client::rpc_client::RpcClient,
-    addresses: &[solana_program::pubkey::Pubkey],
+    addresses: &[solana_sdk::pubkey::Pubkey],
 ) -> Result<Vec<crate::shared::DecodedAccount<Market>>, std::io::Error> {
     let accounts = rpc
         .get_multiple_accounts(addresses)
@@ -151,7 +151,7 @@ pub fn fetch_all_market(
 #[cfg(feature = "fetch")]
 pub fn fetch_maybe_market(
     rpc: &solana_client::rpc_client::RpcClient,
-    address: &solana_program::pubkey::Pubkey,
+    address: &solana_sdk::pubkey::Pubkey,
 ) -> Result<crate::shared::MaybeAccount<Market>, std::io::Error> {
     let accounts = fetch_all_maybe_market(rpc, &[*address])?;
     Ok(accounts[0].clone())
@@ -160,7 +160,7 @@ pub fn fetch_maybe_market(
 #[cfg(feature = "fetch")]
 pub fn fetch_all_maybe_market(
     rpc: &solana_client::rpc_client::RpcClient,
-    addresses: &[solana_program::pubkey::Pubkey],
+    addresses: &[solana_sdk::pubkey::Pubkey],
 ) -> Result<Vec<crate::shared::MaybeAccount<Market>>, std::io::Error> {
     let accounts = rpc
         .get_multiple_accounts(addresses)
