@@ -162,7 +162,7 @@ async fn main() {
     let creator = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32].try_into().unwrap());
     offset += 32;
 
-    optional swap_authority: expect 1 byte tag, then maybe 32 bytes
+    // optional swap_authority: expect 1 byte tag, then maybe 32 bytes
     let swap_auth_tag = account_raw_bytes[offset];
     offset += 1;
     let swap_authority = if swap_auth_tag == 1 {
