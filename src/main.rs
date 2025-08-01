@@ -48,6 +48,29 @@ use borsh::BorshSerialize;
 use std::convert::TryInto;
 
 
+#[derive(Debug)]
+pub struct RawOptionPubkey(pub Option<Pubkey>);
+
+impl BorshDeserialize for RawOptionPubkey {
+    fn deserialize_reader<R: std::io::Read>(reader: &mut R) -> std::io::Result<Self> {
+        let mut tag = [0u8; 1];
+        reader.read_exact(&mut tag)?;
+
+        match tag[0] {
+            0 => Ok(RawOptionPubkey(None)),
+            1 => {
+                let mut key_bytes = [0u8; 32];
+                reader.read_exact(&mut key_bytes)?;
+                Ok(RawOptionPubkey(Some(Pubkey::new_from_array(key_bytes))))
+            }
+            other => Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                format!("Invalid Option representation: {}. The first byte must be 0 or 1", other),
+            )),
+        }
+    }
+}
+
 #[derive(BorshDeserialize, Debug)]
 pub struct MarketSettings {
     pub max_supply: u64,
@@ -62,14 +85,12 @@ pub struct MarketSettings {
 pub struct MarketAccount {
     pub config: Pubkey,
     pub creator: Pubkey,
-    pub swap_authority_option: u8, // Option<Pubkey> encoded as tag + maybe pubkey
-    pub swap_authority: Option<Pubkey>,
+    pub swap_authority: RawOptionPubkey,
     pub token_mint_0: Pubkey,
     pub token_mint_1: Pubkey,
     pub reserve_0: Pubkey,
     pub reserve_1: Pubkey,
-    pub fee_reserve_option: u8,
-    pub fee_reserve: Option<Pubkey>,
+    pub fee_reserve: RawOptionPubkey,
     pub fee_reserve_last_update: i64,
     pub settings: MarketSettings,
     pub sqrt_price_x96: u128,
