@@ -16,7 +16,7 @@ pub fn mul_div(x: U256, y: U256, denominator: U256) -> Result<u128> {
 
     quotient
         .try_into()
-        .map_err(|_| anyhow!("Amount overflow"))
+        .map_err(|_| "AmountOverflow")
 }
 
 pub fn mul_div_round_up(x: U256, y: U256, denominator: U256) -> Result<u128> {
