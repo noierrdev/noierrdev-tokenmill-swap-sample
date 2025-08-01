@@ -155,7 +155,7 @@ async fn main() {
     let mut offset = 0;
 
     // pub config: Pubkey
-    let config = Pubkey::new_from_array(&account_raw_bytes[offset..offset + 32].try_into().unwrap());
+    let config = Pubkey::new_from_array(account_raw_bytes[offset..offset + 32].try_into().unwrap());
     offset += 32;
 
     // pub creator: Pubkey
