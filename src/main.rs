@@ -112,7 +112,7 @@ async fn main() {
     // zero_for_one : direction of swap
     // false : token 1 -> token 2
     // true : token 0 -> token 1
-    let quote_data_1=quote::quote(&market_data, true, 3, 427779926819030658986966333).unwrap();
+    let quote_data_1=quote::quote(&market_data, true, -3, 427779926819030658986966333).unwrap();
     println!("{:?}", quote_data_1);
 
     // let quote_data_2=quote::quote(&market_data, true, 100, market_data.sqrt_price_x96*2).unwrap();
