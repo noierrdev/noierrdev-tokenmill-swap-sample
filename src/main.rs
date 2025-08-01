@@ -124,9 +124,9 @@ async fn main() {
 
     let account_raw_data=rpc_client.get_account(&Pubkey::from_str_const(sample_market)).unwrap();
 
-    
+    let account_raw_bytes: &[u8] = &account_raw_data.data;
 
-    let market = MarketAccount::try_from_slice(&account_raw_data.data);
+    let market = MarketAccount::try_from_slice(account_raw_bytes);
 
     println!("{:?}", market);
 
