@@ -150,7 +150,7 @@ async fn main() {
 
     let account_raw_bytes: &[u8] = &account_raw_data.data;
 
-    println!("{:?}", account_raw_data);
+    println!("{:?}", account_raw_bytes);
     // let market = MarketAccount::try_from_slice(account_raw_bytes);
     // println!("{:?}", market);
 
