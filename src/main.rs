@@ -107,6 +107,7 @@ async fn main() {
     // println!("{:?}", account_raw_bytes);
 
     let market_data=market::Market::try_from_slice(account_raw_bytes);
+    println!("{:?}", market_data);
 
     let mut offset = 8;
 
