@@ -126,7 +126,7 @@ async fn main() {
 
     
 
-    let market = MarketAccount::try_from_slice(account_raw_data.data);
+    let market = MarketAccount::try_from_slice(&account_raw_data.data);
 
     println!("{:?}", market);
 
