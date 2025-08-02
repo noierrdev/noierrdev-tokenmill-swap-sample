@@ -80,7 +80,6 @@ async fn main() {
     println!("Public Key: {}", public_key.to_string());
 
 
-
     //Create web3 connection
     let rpc_api_str = env::var("RPC_API").unwrap();
     let rpc_url = rpc_api_str;
@@ -95,16 +94,12 @@ async fn main() {
     println!("Recent Blockhash : {}",recent_blockhash);
 
 
+    //////////////////////////////////////////////////////////
     let sample_market="2Gcc963e2BY6syyjB3CGrFMw93e8c8zysygzu89Bxdic";
-
     let sample_mint="ALZNPVu3KUZ9jRpbuZKkQbPKf9wHFHpGS2mpjdDtofE1";
 
     let account_raw_data=rpc_client.get_account(&Pubkey::from_str_const(sample_market)).unwrap();
-
-    println!("{:?}", account_raw_data);
-
     let account_raw_bytes: &[u8] = &account_raw_data.data;
-    // println!("{:?}", account_raw_bytes);
 
     let mut market_data=market::Market::from_bytes(account_raw_bytes).unwrap();
     market_data.sqrt_price_x96=427779926819030658986966333;
@@ -325,130 +320,6 @@ async fn main() {
 
 //     if close_output_account {
         
-//         let close_output_account_instruction=close_account( &Pubkey::from_str_const(token_program), &output_token_account, &wallet.pubkey(), &wallet.pubkey(), &[&wallet.pubkey()]).unwrap();
-//         instructions.push(close_output_account_instruction);
-        
-//     }
-
-//     //need to add jito tip instruction 
-//     let jito_tip_instruction = system_instruction::transfer(&wallet.pubkey(), &Pubkey::from_str_const("ADuUkR4vqLUMWXxW9gh6D6L8pMSawimctcNZ5pGwDcEt"), 10000);
-//     instructions.push(jito_tip_instruction);
-
-//     let message = Message::new(&instructions, Some(&wallet.pubkey()));
-//     let mut transaction = Transaction::new_unsigned(message);
-    
-//     transaction
-// }
-
-
-// pub fn build_tokenmill_swap_base_output (
-//     wallet : &Keypair, 
-//     pool : &str, 
-//     input_mint : &str, 
-//     output_mint : &str, 
-//     input_threshold: u64, 
-//     output_amount : u64, 
-//     create_input_account : bool, 
-//     create_output_account :bool, 
-//     close_input_account:bool, 
-//     close_output_account:bool 
-// )-> Transaction{
-
-//     let mut instructions=vec![];
-
-
-//     let raydium_cpmm_program="CPMMoo8L3F4NbTegBCKVNunggL7H1ZpdTHKxQB5qKP1C";
-
-//     let raydium_authority="GpMZbSM2GgvTKHJirzeGfMFoaZ8UR2X7F4v8vHTvxFbL";//PDA but fixed now
-//     let raydium_amm_config="D4FPEruKEHrG5TenZ2mpDGEfu1iUvTiqBxvpU8HLBvC2";//PDA but fixed now
-
-//     let rent_program="SysvarRent111111111111111111111111111111111";
-//     let token_program="TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
-//     let associated_token_program="ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
-//     let system_program="11111111111111111111111111111111";
-
-//     let sol_mint="So11111111111111111111111111111111111111112";
-    
-
-//     let (input_vault, input_vault_bump)=Pubkey::find_program_address(&[b"pool_vault", Pubkey::from_str_const(pool).as_ref(), Pubkey::from_str_const(input_mint).as_ref()], &Pubkey::from_str_const(raydium_cpmm_program));
-//     let (output_vault, output_vault_bump)=Pubkey::find_program_address(&[b"pool_vault", Pubkey::from_str_const(pool).as_ref(), Pubkey::from_str_const(output_mint).as_ref()], &Pubkey::from_str_const(raydium_cpmm_program));
-
-//     let (observation_pda, observation_bump)=Pubkey::find_program_address(&[b"observation", Pubkey::from_str_const(pool).as_ref()], &Pubkey::from_str_const(raydium_cpmm_program));
-
-//     let input_token_account=get_associated_token_address(&wallet.pubkey(), &Pubkey::from_str_const(input_mint));
-//     let output_token_account=get_associated_token_address(&wallet.pubkey(), &Pubkey::from_str_const(output_mint));
-
-//     if create_input_account {
-//         let create_input_account_instruction = create_associated_token_account(
-//             &wallet.pubkey(), // Payer (funding the account creation)
-//             &wallet.pubkey(),          // Wallet address owning the token account
-//             &Pubkey::from_str_const(input_mint),           // Token mint
-//             &Pubkey::from_str_const(token_program)
-//         );
-//         instructions.push(create_input_account_instruction);
-//     }
-
-//     if input_mint == "So11111111111111111111111111111111111111112" {
-//         let wsol_transfer_instruction = system_instruction::transfer(&wallet.pubkey(), &input_token_account, input_threshold);
-//         instructions.push(wsol_transfer_instruction);
-//         let sync_native_instruction =  sync_native(&Pubkey::from_str_const(token_program), &input_token_account).unwrap();
-//         instructions.push(sync_native_instruction);
-//     }
-
-//     if create_output_account {
-//         let create_output_account_instruction = create_associated_token_account(
-//             &wallet.pubkey(), // Payer (funding the account creation)
-//             &wallet.pubkey(),          // Wallet address owning the token account
-//             &Pubkey::from_str_const(output_mint),           // Token mint
-//             &Pubkey::from_str_const(token_program)
-//         );
-//         instructions.push(create_output_account_instruction);
-//     }
-
-//     let instruction_accounts=vec![
-//         AccountMeta::new(wallet.pubkey(),true),//#1
-//         AccountMeta::new_readonly(Pubkey::from_str_const(raydium_authority),false),//#2 raydium authority
-//         AccountMeta::new_readonly(Pubkey::from_str_const(raydium_amm_config),false),//#3 raydium amm config
-//         AccountMeta::new(Pubkey::from_str_const(pool),false),//#4 metadata
-//         AccountMeta::new(input_token_account,false),//#5 input token account
-//         AccountMeta::new(output_token_account,false),//#6 output token account
-//         AccountMeta::new(input_vault,false),//#7 input vault
-//         AccountMeta::new(output_vault,false),//#8 output vault
-//         AccountMeta::new_readonly(Pubkey::from_str_const(token_program),false),//#9 input token program
-//         AccountMeta::new_readonly(Pubkey::from_str_const(token_program),false),//#10 output token program
-//         AccountMeta::new_readonly(Pubkey::from_str_const(input_mint),false),//#11 input mint
-//         AccountMeta::new_readonly(Pubkey::from_str_const(output_mint),false),//#12 output mint
-//         AccountMeta::new(observation_pda,false),//#13 observation
-        
-//     ];
-
-//     let mut data: Vec<u8> = vec![0x37, 0xd9, 0x62, 0x56, 0xa3, 0x4a, 0xb4, 0xad];
-
-//     let mut input_threshold_buffer = [0u8; 8];
-//     input_threshold_buffer.copy_from_slice(&input_threshold.to_le_bytes());
-
-//     let mut output_amount_buffer = [0u8; 8];
-//     output_amount_buffer.copy_from_slice(&output_amount.to_le_bytes());
-
-//     data.extend_from_slice(&input_threshold_buffer);
-//     data.extend_from_slice(&output_amount_buffer);
-
-//     let mut instruction_raw_data=data;
-    
-
-//     let create_instruction = Instruction {
-//         program_id:Pubkey::from_str_const(raydium_cpmm_program),
-//         accounts:instruction_accounts,
-//         data: instruction_raw_data,
-//     };
-//     instructions.push(create_instruction);
-
-//     if close_input_account {
-//         let close_input_account_instruction=close_account( &Pubkey::from_str_const(token_program), &input_token_account, &wallet.pubkey(), &wallet.pubkey(), &[&wallet.pubkey()]).unwrap();
-//         instructions.push(close_input_account_instruction);
-//     }
-
-//     if close_output_account {
 //         let close_output_account_instruction=close_account( &Pubkey::from_str_const(token_program), &output_token_account, &wallet.pubkey(), &wallet.pubkey(), &[&wallet.pubkey()]).unwrap();
 //         instructions.push(close_output_account_instruction);
         
